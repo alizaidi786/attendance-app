@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   User,
@@ -31,14 +32,26 @@ export class AuthService {
       email,
       password
     );
-    const uid = userCredential.user.uid;
 
-    // Save user details and role to Firestore
-    await setDoc(doc(this.firestore, 'users', uid), {
-      email: email,
-      name: name,
-      role: 'user',
+    return new Promise<void>((resolve, reject) => {
+      onAuthStateChanged(this.auth, async (user) => {
+        if (user) {
+          try {
+            await setDoc(doc(this.firestore, 'users', user.uid), {
+              email: user.email,
+              name: name,
+              role: 'user',
+            });
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        } else {
+          reject('User is not authenticated');
+        }
+      });
     });
+    
   }
 
   login(email: string, password: string) {

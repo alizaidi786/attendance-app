@@ -1,0 +1,32 @@
+.attendance-container {
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-bottom: 1rem;
+  }
+  
+  .timer {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #0969da;
+  }
+  
+  .mat-table {
+    width: 100%;
+  }
+  
+  .empty-message {
+    margin-top: 2rem;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+  }
+  

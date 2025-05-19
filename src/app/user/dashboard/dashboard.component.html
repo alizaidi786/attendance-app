@@ -1,1 +1,73 @@
-<p>dashboard works!</p>
+<div class="attendance-container">
+  <div class="top-bar">
+    <button mat-raised-button color="primary" (click)="onCheckClick()">
+      {{ isCheckedIn ? "Check Out" : "Check In" }}
+    </button>
+
+    <div *ngIf="isCheckedIn" class="timer">
+      Timer: {{ elapsedTime | date : "HH:mm:ss" : "UTC" }}
+    </div>
+  </div>
+
+  <mat-table
+    [dataSource]="records"
+    class="mat-elevation-z8"
+    *ngIf="records.length > 0; else emptyState"
+  >
+    <!-- Checked In Column -->
+    <ng-container matColumnDef="checkedInAt">
+      <mat-header-cell *matHeaderCellDef> Checked In </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.checkedInAt?.toDate() | date : "EEE d MMMM y, h:mm a" }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Checked Out Column -->
+    <ng-container matColumnDef="checkedOutAt">
+      <mat-header-cell *matHeaderCellDef> Checked Out </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{
+          element.checkedOutAt
+            ? (element.checkedOutAt.toDate() | date : "EEE d MMMM y, h:mm a")
+            : "-"
+        }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Check In Location -->
+    <ng-container matColumnDef="checkInLocation">
+      <mat-header-cell *matHeaderCellDef> Check In Location </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.checkInLocation }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Check Out Location -->
+    <ng-container matColumnDef="checkOutLocation">
+      <mat-header-cell *matHeaderCellDef> Check Out Location </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.checkOutLocation || "-" }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Add to displayedColumns array -->
+    <ng-container matColumnDef="duration">
+      <mat-header-cell *matHeaderCellDef> Duration </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{
+          calculateDuration(
+            element.checkedInAt?.toDate(),
+            element.checkedOutAt?.toDate()
+          )
+        }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <ng-template #emptyState>
+    <p class="empty-message">No attendance records found.</p>
+  </ng-template>
+</div>
