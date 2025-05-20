@@ -13,7 +13,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // user$: Observable<User | null>;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
   constructor(private auth: Auth, private firestore: Firestore) {
